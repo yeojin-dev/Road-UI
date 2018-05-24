@@ -36,4 +36,7 @@ sysinfo.txt
 *.unitypackage
 
 # Assets
+Assets/Plugins/Quick/
 Assets/DoozyUI/
+DoozyUI.meta
+Quick.meta
