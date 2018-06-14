@@ -13,12 +13,12 @@ public class UIECtrl : MonoBehaviour {
     public Image roadBar;  // 화면 최하단 Bar
     public Transform contentsContainer;  // Content들을 가지고 있는 게임오브젝트, 여기에 있으면 숨김 처리가 됨
 
-    private int contentIndex = 0;  // 현재 화면에 보이는 Content의 인덱스
+    public int contentIndex = 0;  // 현재 화면에 보이는 Content의 인덱스
     private int[] containerIndex = { 0, 2 };  // containerIndex[0] is NextContainer index, [1] is Prev. 
     private int hideIndex;  // goToTemp() 메소드의 대상이 되는 Content의 인덱스
 
     private float touchTime = 0.0f;
-    private float nextTouch = 1.0f;  // 스와이프 인식 딜레이 시간
+    private float nextTouch = 1.2f;  // 스와이프 인식 딜레이 시간
 
     // Use this for initialization
     void Start () {
@@ -49,6 +49,25 @@ public class UIECtrl : MonoBehaviour {
 
         containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
         contentIndex = (contentIndex + 1) > uiContents.Length - 1 ? 0 : contentIndex + 1; // + 방향 wrap around
+
+        uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
+        uiContainers[containerIndex[0]].Show(false);
+
+        touchTime = 0.0f;
+    }
+
+    public void ShowTargetUIE(int target)
+    {
+        if (touchTime < nextTouch) return;
+
+        hideIndex = contentIndex;
+        uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);  // 숨기려는 uiContent를 PrevContainer로 이동
+        // true: 월드 좌표 반영, false: 미반영
+
+        uiContainers[containerIndex[0]].Hide(false);  // true: 즉시, false: 애니메이션 처리
+
+        containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
+        contentIndex = target;
 
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
         uiContainers[containerIndex[0]].Show(false);
