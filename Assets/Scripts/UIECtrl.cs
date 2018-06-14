@@ -20,6 +20,8 @@ public class UIECtrl : MonoBehaviour {
     private float touchTime = 0.0f;
     private float nextTouch = 1.2f;  // 스와이프 인식 딜레이 시간
 
+    public RoadBarCtrl _RoadBarCtrl;
+
     // Use this for initialization
     void Start () {
         foreach (UIElement uiContainer in uiContainers)
@@ -50,6 +52,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
         contentIndex = (contentIndex + 1) > uiContents.Length - 1 ? 0 : contentIndex + 1; // + 방향 wrap around
 
+        StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
         uiContainers[containerIndex[0]].Show(false);
 
@@ -69,6 +72,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
         contentIndex = target;
 
+        StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
         uiContainers[containerIndex[0]].Show(false);
 
@@ -86,6 +90,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[1] = containerIndex[1] == 2 ? 3 : 2;  // PrevContainer 0, 1 토글
         contentIndex = (contentIndex - 1) < 0 ? uiContents.Length - 1 : contentIndex - 1; // - 방향 wrap around
 
+        StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[1]].transform, false);
         uiContainers[containerIndex[1]].Show(false);
 

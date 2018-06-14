@@ -12,6 +12,8 @@ public class RoadBarCtrl : MonoBehaviour {
     public Button[] markers;
     public float[] markerValues;
 
+    private Dictionary<string, int> markerContentDict = new Dictionary<string, int>();
+
     private int i;
     private Vector3 markerPos;
 
@@ -30,7 +32,12 @@ public class RoadBarCtrl : MonoBehaviour {
             marker.onClick.AddListener(LoadContent);
             i++;
         }
-	}
+
+        for (i = 0; i < markers.Length; i++)
+        {
+            markerContentDict.Add(markers[i].name, i);
+        }
+    }
 
     private void Update()
     {
@@ -41,12 +48,16 @@ public class RoadBarCtrl : MonoBehaviour {
     {
         if (touchTime < nextTouch) return;
 
-        StartCoroutine(FillRoadBar((EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().position.x) / 1440.0f));
-        _UIECtrl.ShowTargetUIE(0);
+        GameObject clickedObj = EventSystem.current.currentSelectedGameObject;
+
+        float amount = clickedObj.GetComponent<RectTransform>().position.x / 1440.0f;
+
+        StartCoroutine(FillRoadBar(amount));
+        _UIECtrl.ShowTargetUIE(markerContentDict[clickedObj.name]);
         touchTime = 0.0f;
     }
 
-    IEnumerator FillRoadBar(float amount)
+    public IEnumerator FillRoadBar(float amount)
     {
         float offset = (amount - roadBar.fillAmount) / 30.0f;
 
