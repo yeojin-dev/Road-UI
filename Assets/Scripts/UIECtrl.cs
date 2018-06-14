@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using DoozyUI;
 
 public class UIECtrl : MonoBehaviour {
@@ -21,6 +22,10 @@ public class UIECtrl : MonoBehaviour {
     private float nextTouch = 1.2f;  // 스와이프 인식 딜레이 시간
 
     public RoadBarCtrl _RoadBarCtrl;
+
+    public VideoPlayer vehicleVideo;
+    public VideoPlayer subwayVideo;
+    public VideoPlayer smitVideo;
 
     // Use this for initialization
     void Start () {
@@ -52,6 +57,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
         contentIndex = (contentIndex + 1) > uiContents.Length - 1 ? 0 : contentIndex + 1; // + 방향 wrap around
 
+        VideoStart();
         StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
         uiContainers[containerIndex[0]].Show(false);
@@ -72,6 +78,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[0] = containerIndex[0] == 0 ? 1 : 0;  // NextContainer 0, 1 토글
         contentIndex = target;
 
+        VideoStart();
         StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[0]].transform, false);
         uiContainers[containerIndex[0]].Show(false);
@@ -90,6 +97,7 @@ public class UIECtrl : MonoBehaviour {
         containerIndex[1] = containerIndex[1] == 2 ? 3 : 2;  // PrevContainer 0, 1 토글
         contentIndex = (contentIndex - 1) < 0 ? uiContents.Length - 1 : contentIndex - 1; // - 방향 wrap around
 
+        VideoStart();
         StartCoroutine(_RoadBarCtrl.FillRoadBar(_RoadBarCtrl.markerValues[contentIndex]));
         uiContents[contentIndex].SetParent(uiContainers[containerIndex[1]].transform, false);
         uiContainers[containerIndex[1]].Show(false);
@@ -102,4 +110,29 @@ public class UIECtrl : MonoBehaviour {
     {
         uiContents[hideIndex].SetParent(contentsContainer, false);
     }
+
+    public void VideoStart()
+    {
+        switch (contentIndex)
+        {
+            case 2:
+                Debug.Log(1);
+                vehicleVideo.Play();
+                break;
+
+            case 4:
+                Debug.Log(2);
+                subwayVideo.Play();
+                break;
+
+            case 6:
+                Debug.Log(3);
+                smitVideo.Play();
+                break;
+
+            default:
+                return;
+        }
+    }
+    
 }
