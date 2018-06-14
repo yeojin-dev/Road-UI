@@ -15,6 +15,9 @@ public class RoadBarCtrl : MonoBehaviour {
     private int i;
     private Vector3 markerPos;
 
+    private float touchTime = 0.0f;
+    private float nextTouch = 1.2f;
+
     // Use this for initialization
     void Start () {
         roadBar.fillAmount = 0.01f;
@@ -28,10 +31,29 @@ public class RoadBarCtrl : MonoBehaviour {
             i++;
         }
 	}
-	
+
+    private void Update()
+    {
+        touchTime += Time.deltaTime;
+    }
+
     public void LoadContent()
     {
-        roadBar.fillAmount = (EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().position.x) / 1440.0f;
+        if (touchTime < nextTouch) return;
+
+        StartCoroutine(FillRoadBar((EventSystem.current.currentSelectedGameObject.GetComponent<RectTransform>().position.x) / 1440.0f));
         _UIECtrl.ShowTargetUIE(0);
+        touchTime = 0.0f;
+    }
+
+    IEnumerator FillRoadBar(float amount)
+    {
+        float offset = (amount - roadBar.fillAmount) / 30.0f;
+
+        for (i = 0; i < 30; i++)
+        {
+            roadBar.fillAmount += offset;
+            yield return null;
+        }
     }
 }
