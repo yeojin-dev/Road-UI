@@ -27,7 +27,7 @@ public class RoadBarCtrl : MonoBehaviour {
         i = 0;
         foreach (Button marker in markers)
         {
-            markerPos = new Vector3(14.4f * markerValues[i] * 100.0f, 20.0f, 0.0f);
+            markerPos = new Vector3(Screen.width * markerValues[i], 20.0f, 0.0f);
             marker.GetComponent<RectTransform>().position = markerPos;
             marker.onClick.AddListener(LoadContent);
             i++;
@@ -59,12 +59,13 @@ public class RoadBarCtrl : MonoBehaviour {
 
     public IEnumerator FillRoadBar(float amount)
     {
-        float offset = (amount - roadBar.fillAmount) / 30.0f;
+        float offset = (amount - roadBar.fillAmount) / 29.0f;
 
-        for (i = 0; i < 30; i++)
+        for (i = 0; i < 29; i++)
         {
             roadBar.fillAmount += offset;
             yield return null;
         }
+        roadBar.fillAmount = amount;
     }
 }
